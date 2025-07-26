@@ -1,14 +1,257 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" x-data="faqData()" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HASKA Fun Run 2025 - FAQ</title>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #1251A1;
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: 'Helvetica', sans-serif;
+      font-weight: bold;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header h2 {
+      font-family: 'IvyOra Display Medium Italic', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      color: #FAD02C;
+    }
+
+    .faq-section {
+      max-width: 800px;
+      width: 50%;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      flex: 1;
+    }
+
+    .faq-search {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .faq-search input {
+      width: 100%;
+      padding: 0.75rem 2.5rem 0.75rem 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .clear-button {
+      position: absolute;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #FAD02C;
+      color: #333;
+      border: none;
+      border-radius: 4px;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .faq-item {
+      margin-bottom: 1rem;
+      border-left: 4px solid #1251A1;
+      background-color: #fff;
+      padding: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .faq-question {
+      font-weight: bold;
+      cursor: pointer;
+      color: #1251A1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-question:hover {
+      color: #77C4ED;
+    }
+
+    .faq-answer {
+      margin-top: 0.5rem;
+      color: #333;
+    }
+
+    footer {
+      background-color: #688EB7;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .social-icons a {
+      margin: 0 0.5rem;
+      color: white;
+      font-size: 1.2rem;
+      text-decoration: none;
+    }
+
+    .social-icons a:hover {
+      color: #FAD02C;
+    }
+
+    .chevron {
+      transition: transform 0.3s ease;
+    }
+
+    .rotate {
+      transform: rotate(180deg);
+    }
+
+    @media (max-width: 800px) {
+      header h1 {
+        font-size: 1.5rem;
+      }
+
+      header h2 {
+        font-size: 1rem;
+      }
+
+      .faq-section {
+        width: 95%;
+      }
+
+      .faq-search input {
+        font-size: 0.95rem;
+      }
+
+      .clear-button {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.4rem;
+      }
+
+      .faq-item {
+        padding: 0.75rem;
+      }
+
+      .faq-question {
+        font-size: 1rem;
+      }
+
+      .faq-answer p {
+        font-size: 0.95rem;
+      }
+
+      .social-icons a {
+        font-size: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+  <header>
+    <h1>HASKA Fun Run 2025</h1>
+    <h2>Frequently Asked Question</h2>
+  </header>
+
+  <main class="faq-section" x-data="faqData()">
+    <div class="faq-search">
+      <input type="text" placeholder="Search FAQs..." x-model="searchQuery">
+      <button class="clear-button" x-show="searchQuery" @click="searchQuery = ''">×</button>
+    </div>
+    <template x-for="(item, index) in filteredFaqs" :key="index">
+      <div class="faq-item">
+        <div class="faq-question" @click="openFaq === index ? openFaq = null : openFaq = index">
+          <span x-html="item.q"></span>
+          <i class="fas fa-chevron-down chevron" :class="{ 'rotate': openFaq === index }"></i>
+        </div>
+        <div class="faq-answer" x-show="openFaq === index" x-transition>
+          <p x-html="item.a"></p>
+        </div>
+      </div>
+    </template>
+  </main>
+
+  <footer>
+    <div class="social-icons">
+      <span>HASKA</span>
+      <a href="https://instagram.com/haskaofficial" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.facebook.com/haskasmakbogor/" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+      <a href="https://tiktok.com/@haska.guyub" aria-label="Tiktok"><i class="fab fa-tiktok"></i></a>
+      <a href="https://id.linkedin.com/in/haska-himpunan-alumni-sekolah-kimia-analisis-bogor-25080920a" aria-label="Linked in"><i class="fab fa-linkedin"></i></a>
+      <span>HASKA Runner</span>
+      <a href="https://instagram.com/haskarunners/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
+    <p>&copy; 2025 HASKA Fun Run</p>
+  </footer>
+
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('faqData', () => ({
+        openFaq: null,
+        searchQuery: '',
+        faqItems: [
+        { q: 'Apa itu HASKA Fun Run 2025?', a: 'HASKA Fun Run 2025 adalah bagian dari OLYMPIAD LUSTRUM XV yang diadakan oleh Himpunan Alumni Sekolah Kimia Analisis sebagai bagian dari Rangkaian Acara  LUSTRUM XV 2025' },
+        { q: 'Kapan HASKA Fun Run 2025 diadakan?', a: 'HASKA Fun Run 2025 dlaksanakan pada hari Minggu tanggal 14 September 2025' },
+        { q: 'Siapa saja yang boleh ikut dalam event HASKA Fun Run 2025?', a: 'Semua orang berusia 13-70 tahun boleh ikut mendaftar dalam event ini.' },
+        { q: 'Apa selain dari alumni smakbo bisa daftar?', a: 'Acara ini diutamakan untuk alumni, keluarga besar alumni, guru, siswa/i dan keluarga besar SMK SMAK Bogor, namun kami tetep membuka pendaftaran bagi kalangan umum yang ingin ikut berpartisipasi dalam event ini' },
+        { q: 'Apakah anak dengan usia di bawah 13 tahun boleh ikut?', a: 'Anak-anak berusia di bawah 13 tahun boleh ikut dengan syarat mereka tetap didampingi oleh orang tuanya' },
+        { q: 'Apakah ada syarat khusus bagi peserta berusia lanjut untuk dapat mengikuti event ini?', a: 'Peserta dengan usia di atas 60 tahun disarankan agar melengkapi diri dengan surat keterangan sehat dari dokter atau klinik/rumah sakit secara resmi dan membawanya pada saat pengambilan Jersey dan Race Pack' },
+        { q: 'Berapa biaya pendaftaran HASKA Fun Run 2025?', a: 'Biaya pendaftaran untuk HASKA Fun Run 2025 adalah sebesar Rp150.000 per peserta. <br/>Namun, bagi yang mendaftar lebih awal pada periode early bird, tersedia harga spesial sebesar Rp100.000. Jangan lewatkan kesempatan ini!' },
+        { q: 'kapan batas waktu pendaftaran HASKA Fun Run 2025?', a: 'Pendaftaran HASKA Fun Run 2025 berkahir pada 31 Agustus 2025' },
+        { q: 'kapan batas waktu pendaftaran earlybird?', a: 'Periode Early Bird dapat dinikmati hingga tanggal 31 Juli 2025' },
+        { q: 'Bagaimana cara mendaftar event HASKA Fun Run 2025?', a: 'Silakan akses https://linktr.ee/haskafunrun2025 kemudian klik pada tombol "Daftar HASKA Fun Run"' },
+        { q: 'Apa saja yang termasuk dalam biaya pendaftaran?', a: 'Yang sudah termasuk dalam biaya pendaftaran, di antaranya: Jersey, Race Pack, BIB, dan Refreshment' },
+        { q: 'Apakah ada harga khusus untuk komunitas?', a: 'Bagi Komunitas yang mendaftar dengan minimal anggota sejumlah 10 orang, bisa mendapatkan harga khusus sebesar Rp.100.000,-/orang' },
+        { q: 'Apakah bisa mendaftar langsung on the spot di lokasi pada hari H?', a: 'Tidak, kami hanya membuka pendaftaran hingga tanggal 31 Juni 2025 melalui formulir online yang telah kami sediakan' },
+        { q: 'Apabila saya telah melakukan pendaftaran, bisakah orang lain menggantikan posisi saya?', a: 'Peserta yang sudah terdaftar tidak dapat digantikan atau dialihkan ke orang lain. Pendaftaran bersifat pribadi dan tidak bisa dipindahtangankan.' },
+        { q: 'Jika saya tidak jadi ikut, apakah biaya pendaftaran akan dikembalikan (refund)?', a: 'Biaya pendaftaran tidak dapat dikembalikan. Jika peserta memutuskan untuk tidak mengikuti lomba, pendaftaran yang sudah dilakukan dianggap final dan tidak tersedia opsi refund.' },
+        { q: 'Apa yang harus saya lakukan jika saya belum menerima eTicket atau eTicket saya hilang?', a: 'Untuk mendapat informasi mengenai eTicket, silakan menghubungi seksi informasi kami melalui WhatsApp di nomor 0813-2205-9780' },
+        { q: 'Bagaimana jika Saya ingin ikut tapi tidak sanggup untuk berlari sejauh 5 Km, bolehkah ikut event dengan berjalan (tidak lari)?', a: 'Pada pelaksanaan event ini, kami menyediakan Pacer yang akan memandu kecepatan berlari peserta. Jika peserta masih belum bisa mengikuti kecepatan Pacer, maka diperbolehkan untuk mengikuti dengan cara berjalan.' },
+        { q: 'Di mana lokasi start dan finish acara HASKA Fun Run 2025?', a: 'Lokasi Start dan Finish berada di tempat yang sama, yaitu Gedung SMK SMAK Bogor dengan alamat Jalan Pangeran Sogiri no. 374, Tanah Baru, Bogor Utara, Kota Bogor' },
+        { q: 'Pada jam berapa start (flag off) dilakukan?', a: 'Flag off akan dilakukan pada pukul 06.00 wib' },
+        { q: 'Bagaimana jika saya datang terlambat?', a: 'Peserta boleh tetap mengikuti kegiatan. Silakan menyesuaikan dengan kondisi saat kedatangan' },
+        { q: 'Apakah ada peta rute lomba?', a: 'Rute event HASKA Fun Run 2025 akan kami publikasikan melalui IG Haska & IG HASKA Runner menjelang hari H. Silakan follow IG kami agar tidak ketinggalan Infonya.' },
+        { q: 'Apa saja yang harus saya bawa pada hari H?', a: 'Peserta cukup mengunakan Jersey yang sudah dipasangi BIB sebagai tanda telah mendaftar dalam event HASKA Fun Run 2025' },
+        { q: 'Berapa lama batas waktu (cut-off time) untuk menyelesaikan 5K?', a: 'Batas waktu dari Flag Off ke Cut of Time adalah 75 menit 75 menit' },
+        { q: 'Bagaimana jika saya tidak berhasil menyelesaikan 5K sebelum batas waktu (cut-off time) yang ditentukan?', a: 'Kami menyediakan mobil sweeper bagi peserta yang belum menyelesaikan putaran setelah Cut of Time tercapai' },
+        { q: 'Kapan racepack dan jersey dapat diambil?', a: 'Jersey dan Race Pack dapat diambil hari Sabtu, 13 September 2025 di Gedung SMK SMAK Bogor dengan alamat Jalan Pangeran Sogiri no. 374, Tanah Baru, Bogor Utara, Kota Bogor' },
+        { q: 'Apa Syarat pengambilan Jersey dan Race Pack?', a: 'Untuk dapat mengambil Jersey dan Race Pack, peserta wajib menunjukkan eTicket yang diperoleh dari pendaftaran' },
+        { q: 'Apa saja syarat yang diperlukan jika pengambilan racepack diwakilkan?', a: 'Syarat yang harus dibawa jika racepack diwakilkan adalah eTicket, Fotocopy kartu identitas yang digunakan saat registrasi, Surat Kuasa, serta kartu identitas yang mewakili' },
+        { q: 'Apa saja isi dari racepack yang akan didapat?', a: 'Race Pack yang diperoleh peserta terdiri atas Jersey, BIB, dan produk dari sponsor' },
+        { q: 'bolehkah saya mengambil jersey dan racepack di hari H?', a: 'Jersey dan Race Pack hanya dapat diambil di hari Sabtu, tanggal 13 September 2025' },
+        { q: 'Apakah ada sarana evakuasi sepanjang jalur lari?', a: 'Pada saat event berlangsung, penitia menyiapkan tim medis dan mobil ambulan untuk membantu peserta yang membutuhkan evakuasi' },
+        { q: 'Apakah hanya finisher yang dapat medali?', a: 'Ya, hanya Finisher di bawah Cut of Time 75 menit yang akan menerima medali' },
+        ],
+        get filteredFaqs() {
+          if (!this.searchQuery.trim()) return this.faqItems;
+          return this.faqItems.filter(item =>
+            item.q.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            item.a.toLowerCase().includes(this.searchQuery.toLowerCase())
+          );
+        }
+      }))
+    });
+  </script>
 </body>
 </html>
